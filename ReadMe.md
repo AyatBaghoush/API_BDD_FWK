@@ -27,4 +27,4 @@ Below are the instructions to follow to setup the project locally.
 
 ### How to Run Tests
 To be able to run the test cases, go to the test explorer after building your project successfully. You can either run a single test case or run the whole test suit.
-After Running your tests: check the created folder "Report" in the project directory for the latest test report
+- After Running your tests: check the created folder "Report" in the project directory for the latest test report
