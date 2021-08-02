@@ -121,10 +121,41 @@ namespace API_BDD_Framwork.Utilities
             return request;
         }
 
-        private void AuthenticateRequest(IRestClient client, IRestRequest request)
+        
+        public RestClient AuthenticateRequest(RestClient client, string usernameKey, string username, string passKey, string password)
         {
-            /* TODO: for future impelementation*/
+            client.Authenticator = new SimpleAuthenticator(usernameKey, username, passKey, password);
+            return client;
 
+        }
+
+        public RestClient AuthenticateRequest(RestClient client, string username, string password)
+        {
+            client.Authenticator = new HttpBasicAuthenticator(username, password);
+            return client;
+
+        }
+
+        public RestClient AuthenticateRequest(RestClient client, string requestTokenUrl, string id, string secret)
+        {
+            RestRequest request = new RestRequest(requestTokenUrl) { Method = Method.POST };
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("client_id", id);
+            request.AddParameter("client_secret", secret);
+            request.AddParameter("grant_type", "client_credentials");
+            var tResponse = client.Execute(request);
+            var responseJson = tResponse.Content;
+            var token = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseJson)["access_token"].ToString();
+            client.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(token);
+            return client;
+
+        }
+
+        public RestClient AuthenticateRequest(RestClient client, string accessToken)
+        {
+            client.Authenticator = new JwtAuthenticator(accessToken);
+            return client;
 
         }
 
