@@ -158,6 +158,13 @@ namespace API_BDD_Framwork.Utilities
             return client;
 
         }
+        
+        public RestRequest AuthenticateRequest(RestClient client, RestRequest request,IAuthenticator authenticator)
+        {
+            authenticator.Authenticate(client, request);
+            return request;
+
+        }
 
     }
 }
